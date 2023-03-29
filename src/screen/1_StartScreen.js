@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  ScrollView,
 } from "react-native";
 import { Text, Input, Button } from "react-native-elements";
 import Spacer from "../components/Spacer";
@@ -12,22 +13,22 @@ import jsonServer from "../../api/jsonServer";
 
 // import BackgroundImg from "../components/BackGroundImage";
 
-const onSubmit = async (email, password, callback) => {
+const onSubmit = async (email, password, setErrorMessage, callback) => {
   //const [pat_det, setPatientDet] = useState("");
-  let pat_det = "Dummt";
   try {
     const response = await jsonServer.post(`/patient/login`, {
-      username: "abc",
-      password: "pass",
+      username: email,
+      password: password,
     });
     // setPatientDet(response.data);
-    pat_det = response.data;
+    const pat_det = response.data;
     console.log("\n\n------------- Pring Pat_det");
     console.log(pat_det);
     callback(pat_det);
     console.log("\n\n\n-----------------POST : Getting Patient Detials");
     console.log(response.data);
   } catch (e) {
+    setErrorMessage("Oppssss!!! Something went wrong..Try Again");
     console.log("\n\n\n----------------Ayoo..Issue Getting the Details");
     console.log(e.message);
   }
@@ -35,7 +36,7 @@ const onSubmit = async (email, password, callback) => {
 const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const errorMessage = "";
+  const [errorMessage, setErrorMessage] = useState("");
   return (
     <>
       <View style={style.containerStyle}>
@@ -86,7 +87,7 @@ const StartScreen = ({ navigation }) => {
               }}
               onPress={() => {
                 console.log(email, password);
-                onSubmit(email, password, (patient_det) =>
+                onSubmit(email, password, setErrorMessage, (patient_det) =>
                   navigation.navigate("PatientHome", { pat_det: patient_det })
                 );
               }}
@@ -120,6 +121,12 @@ const style = StyleSheet.create({
     borderRadius: 70,
     borderWidth: 5,
     borderColor: "rgba(111, 202, 186, 1)",
+  },
+  errorMessageStyle: {
+    color: "red",
+    fontSize: 13,
+    textAlign: "center",
+    marginBottom: 14,
   },
 
   loginButStyle: {

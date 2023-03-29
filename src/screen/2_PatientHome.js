@@ -4,6 +4,7 @@ import { Button, Text, Input, ListItem, Avatar } from "react-native-elements";
 import { FlatList } from "react-navigation";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
+import DropDownComponent from "../components/2_DropDownComponent";
 
 const initHashMap = (hashMap, workout_data) => {
   const size = workout_data.length;
@@ -65,95 +66,33 @@ const PatientHome = ({ navigation }) => {
         keyExtractor={(workout) => workout.workout_instance_id}
         renderItem={({ item }) => {
           return state.includes(item.workout_instance_id) ? (
-            <View>
-              <Spacer>
-                <ListItem.Accordion
-                  content={
-                    <ListItem.Content>
-                      <ListItem.Title>{item.workout.title}</ListItem.Title>
-                    </ListItem.Content>
-                  }
-                  isExpanded={true}
-                  onPress={() => {
+            <Spacer>
+              <DropDownComponent
+                workout_title={item.workout.title}
+                workout_description={item.description}
+                workout_status={item.completed}
+                expandable={true}
+                onPress={() => {
+                  {
                     setState(
                       state.filter((i) => i !== item.workout_instance_id)
                     );
-                  }}
-                >
-                  <ListItem>
-                    <Avatar
-                      size={64}
-                      rounded
-                      icon={{ name: "pencil", type: "font-awesome" }}
-                      containerStyle={{ backgroundColor: "#87CEEB" }}
-                    />
-                    <ListItem.Content>
-                      <ListItem.Title>Description</ListItem.Title>
-                      <ListItem.Subtitle>
-                        {item.workout.description}
-                      </ListItem.Subtitle>
-                    </ListItem.Content>
-                  </ListItem>
-                  <ListItem>
-                    <Avatar
-                      size={64}
-                      rounded
-                      icon={{ name: "question", type: "font-awesome" }}
-                      containerStyle={{ backgroundColor: "#5F9EA0" }}
-                    />
-                    <ListItem.Content>
-                      <ListItem.Title>Completed?</ListItem.Title>
-                      <ListItem.Subtitle>
-                        {item.completed ? "Yes" : "Nope"}
-                      </ListItem.Subtitle>
-                    </ListItem.Content>
-                  </ListItem>
-                </ListItem.Accordion>
-              </Spacer>
-            </View>
-          ) : (
-            <View>
-              <ListItem.Accordion
-                content={
-                  <ListItem.Content>
-                    <ListItem.Title>{item.workout.title}</ListItem.Title>
-                  </ListItem.Content>
-                }
-                isExpanded={false}
-                onPress={() => {
-                  setState([...state, item.workout_instance_id]);
+                  }
                 }}
-              >
-                <ListItem>
-                  <Avatar
-                    size={64}
-                    rounded
-                    icon={{ name: "pencil", type: "font-awesome" }}
-                    containerStyle={{ backgroundColor: "blue" }}
-                  />
-                  <ListItem.Content>
-                    <ListItem.Title>Description</ListItem.Title>
-                    <ListItem.Subtitle>
-                      {item.workout.description}
-                    </ListItem.Subtitle>
-                  </ListItem.Content>
-                </ListItem>
-                <ListItem>
-                  <Avatar
-                    size={64}
-                    rounded
-                    icon={{ name: "pencil", type: "font-awesome" }}
-                    containerStyle={{ backgroundColor: "#6733b9" }}
-                  />
-                  <ListItem.Content>
-                    <ListItem.Title>Completed?</ListItem.Title>
-                    <ListItem.Subtitle>
-                      {item.completed ? "Yes" : "Nope"}
-                    </ListItem.Subtitle>
-                  </ListItem.Content>
-                </ListItem>
-              </ListItem.Accordion>
-            </View>
+              />
+            </Spacer>
+          ) : (
+            <DropDownComponent
+              workout_title={item.workout.title}
+              workout_description={item.description}
+              workout_status={item.completed}
+              expandable={false}
+              onPress={() => {
+                {
+                  setState([...state, item.workout_instance_id]);
+                }
+              }}
+            />
           );
         }}
       />
