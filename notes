@@ -1,0 +1,16 @@
+>>npx create-expo-app mentalhealthApp
+>>npm install react-navigation
+>>npm install react-navigation-stack
+>>npm install axios
+
+--------------------------------
+
+To start DB:
+add an entry in "scripts" tag in package.js file 
+ "db": "json-server -w db.json",
+  "tunnel": "ngrok http 3000",
+Create a database file "db.json"
+>>npm run db
+>>ngrok http 3000
+
+-------------------------------
