@@ -187,6 +187,10 @@ const style = StyleSheet.create({
     color: "rgba(199, 43, 98, 1)",
     textAlign: "center",
   },
+  genderStyle: {
+    marginRight: 160,
+    marginTop: 40,
+  },
 });
 
 PersonalDetailsRegistration.navigationOptions = () => {

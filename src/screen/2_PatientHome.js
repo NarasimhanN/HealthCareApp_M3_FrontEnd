@@ -69,8 +69,12 @@ const PatientHome = ({ navigation }) => {
             <Spacer>
               <DropDownComponent
                 workout_title={item.workout.title}
-                workout_description={item.description}
+                workout_description={item.workout.description}
                 workout_status={item.completed}
+                goToQuestions={() =>
+                  navigation.navigate("Questions", { workout: item })
+                }
+                questions=""
                 expandable={true}
                 onPress={() => {
                   {
