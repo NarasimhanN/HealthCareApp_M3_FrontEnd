@@ -5,24 +5,20 @@ import { FlatList } from "react-navigation";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import DropDownComponent from "../components/2_DropDownComponent";
+// import { useIsFocused } from "@react-navigation/native"; //for react 5
 
-const initHashMap = (hashMap, workout_data) => {
-  const size = workout_data.length;
-  for (let i = 0; i < size; i++) {
-    hashMap.set(workout_data[i].workout_instance_id, false);
-  }
-
-  console.log("New Hashmap ", hashMap);
-};
 // const reducer = (state, action) => {
 //   return {...state,{"id":action.payload.id}}
 // };
-const PatientHome = ({ navigation }) => {
+const PatientHome = (props) => {
   console.log("****PATIENT HOME******************************");
-  let hashmap = new Map();
-  console.log(hashmap);
   const [workout_data, setWorkoutData] = useState("");
   const [patient_det, setPatientDet] = useState("");
+
+  const unsubscribe = props.navigation.addListener("didFocus", () => {
+    console.log("focussed");
+    getPatientWorkOut();
+  });
 
   const getPatientWorkOut = async () => {
     // const response = await jsonServer.get("/questionare");
@@ -46,8 +42,6 @@ const PatientHome = ({ navigation }) => {
     getPatientWorkOut();
   }, []);
 
-  initHashMap(hashmap, workout_data);
-
   console.log("----------- Patient Details : ---------");
   console.log(patient_det);
 
@@ -56,8 +50,16 @@ const PatientHome = ({ navigation }) => {
   return (
     <View style={style.containerStyle}>
       <Spacer />
-      <Text h2 style={{ textAlign: "center" }}>
-        Hello {patient_det["username"]}
+      <Text
+        h3
+        style={{
+          textAlign: "center",
+          fontFamily: "sans-serif",
+          fontSize: 19,
+        }}
+      >
+        {/* Hello {patient_det["username"]} */}
+        Hello Simha
       </Text>
       <Spacer />
 
@@ -72,7 +74,9 @@ const PatientHome = ({ navigation }) => {
                 workout_description={item.workout.description}
                 workout_status={item.completed}
                 goToQuestions={() =>
-                  navigation.navigate("Questions", { workout: item })
+                  props.navigation.navigate("Questions", {
+                    workoutObj: item,
+                  })
                 }
                 questions=""
                 expandable={true}

@@ -99,11 +99,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
         <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
           Gender
         </Text>
-        <RadioGroup
-          style={style.genderStyle}
-          radioButtons={radioButtons}
-          onPress={onPressRadioButton}
-        />
+        <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} />
         <Input
           label="Contact No"
           onChangeText={(data) => (patientDetails["contact_number"] = data)}
@@ -188,8 +184,11 @@ const style = StyleSheet.create({
     textAlign: "center",
   },
   genderStyle: {
-    marginRight: 160,
     marginTop: 40,
+    alignContent: "flex-start",
+    alignItems: "flex-start",
+    alignSelf: "flex-start",
+    flex: 1,
   },
 });
 

@@ -10,6 +10,8 @@ import {
 import { Text, Input, Button } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import jsonServer from "../../api/jsonServer";
+// import { AsyncStorage } from "react-native-community/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // import BackgroundImg from "../components/BackGroundImage";
 
@@ -25,7 +27,9 @@ const onSubmit = async (email, password, setErrorMessage, callback) => {
     console.log("\n\n------------- Pring Pat_det");
     console.log(pat_det);
     callback(pat_det);
+    //   await AsyncStorage.setItem("token", "1222222222222333333333333333");
     console.log("\n\n\n-----------------POST : Getting Patient Detials");
+
     console.log(response.data);
   } catch (e) {
     setErrorMessage("Oppssss!!! Something went wrong..Try Again");
