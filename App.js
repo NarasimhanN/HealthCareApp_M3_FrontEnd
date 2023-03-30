@@ -5,6 +5,7 @@ import RegistrationScreen from "./src/screen/1.3_RegistrationScreen";
 import PersonalDetailsRegistration from "./src/screen/1.1_PersonalDetailsRegistration";
 import PatientHome from "./src/screen/2_PatientHome";
 import QuestionsScreen from "./src/screen/2.1_QuestionsScreen";
+import InitScreen from "./src/screen/0_InitScreen";
 // import { NavigationContainer } from "@react-navigation/native";
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
@@ -22,6 +23,7 @@ import QuestionsScreen from "./src/screen/2.1_QuestionsScreen";
 
 const navigator = createStackNavigator(
   {
+    Init: InitScreen,
     Start: StartScreen,
     Register: RegistrationScreen,
     PersonalDet: PersonalDetailsRegistration,

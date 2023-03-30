@@ -10,10 +10,37 @@ import {
 import { Text, Input, Button } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import jsonServer from "../../api/jsonServer";
-// import { AsyncStorage } from "react-native-community/async-storage";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  getPassToken,
+  getToken,
+  getUsnToken,
+  setToken,
+  validateUsnPassToken,
+  setUsnPassToken,
+  removeUsnPassToken,
+} from "../components/1_Token";
 
 // import BackgroundImg from "../components/BackGroundImage";
+
+// const setToken = async () => {
+//   try {
+//     console.log("())()()()(()()()() SEtting TOken ");
+//     await AsyncStorage.setItem("token", "1222333333333333333");
+//   } catch (e) {
+//     console.log(" )))))))))))))))))))))))))))))))CANT SET TOKEN");
+//   }
+// };
+
+// const getToken = async () => {
+//   try {
+//     await AsyncStorage.getItem("token").then((token) =>
+//       console.log("Toeknnnnn ()()()(  ===========", token)
+//     );
+//   } catch (e) {
+//     console.log("\n\n(((((((((((((((((((((((((((()))))))))) NO TOKEN");
+//   }
+// };
 
 const onSubmit = async (email, password, setErrorMessage, callback) => {
   //const [pat_det, setPatientDet] = useState("");
@@ -22,12 +49,13 @@ const onSubmit = async (email, password, setErrorMessage, callback) => {
       username: email,
       password: password,
     });
-    // setPatientDet(response.data);
+
     const pat_det = response.data;
     console.log("\n\n------------- Pring Pat_det");
     console.log(pat_det);
+    setUsnPassToken(email, password);
     callback(pat_det);
-    //   await AsyncStorage.setItem("token", "1222222222222333333333333333");
+
     console.log("\n\n\n-----------------POST : Getting Patient Detials");
 
     console.log(response.data);
@@ -41,6 +69,15 @@ const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // if (validateUsnPassToken()) {
+  //   setEmail(getUsnToken());
+  //   setPassword(getPassToken());
+  //   onSubmit(email, password, setErrorMessage, (patient_det) =>
+  //     navigation.navigate("PatientHome", { pat_det: patient_det })
+  //   );
+  //   return <View></View>;
+  // }
   return (
     <>
       <View style={style.containerStyle}>

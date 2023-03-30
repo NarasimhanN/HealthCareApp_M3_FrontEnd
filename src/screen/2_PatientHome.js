@@ -5,16 +5,27 @@ import { FlatList } from "react-navigation";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import DropDownComponent from "../components/2_DropDownComponent";
+import { Entypo } from "@expo/vector-icons";
+import { removeToken, removeUsnPassToken } from "../components/1_Token";
 // import { useIsFocused } from "@react-navigation/native"; //for react 5
 
 // const reducer = (state, action) => {
 //   return {...state,{"id":action.payload.id}}
 // };
+// const getToken = async () => {
+//   try {
+//     await AsyncStorage.getItem("token").then((token) =>
+//       console.log("Toeknnnnn ()()()(  ===========", token)
+//     );
+//   } catch (e) {
+//     console.log("\n\n(((((((((((((((((((((((((((()))))))))) NO TOKEN");
+//   }
+// };
+
 const PatientHome = (props) => {
   console.log("****PATIENT HOME******************************");
   const [workout_data, setWorkoutData] = useState("");
   const [patient_det, setPatientDet] = useState("");
-
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     console.log("focussed");
     getPatientWorkOut();
@@ -104,6 +115,32 @@ const PatientHome = (props) => {
           );
         }}
       />
+      <Button
+        title="Logout"
+        onPress={() => {
+          removeUsnPassToken();
+          props.navigation.navigate("Start");
+        }}
+        icon={{
+          name: "",
+          type: "font-awesome",
+          size: 15,
+          color: "white",
+        }}
+        iconContainerStyle={{ marginRight: 10 }}
+        titleStyle={{ fontWeight: "700" }}
+        buttonStyle={{
+          backgroundColor: "#5F9EA0",
+          borderColor: "transparent",
+          borderWidth: 0,
+          borderRadius: 30,
+        }}
+        containerStyle={{
+          width: 200,
+          alignSelf: "center",
+          marginVertical: 30,
+        }}
+      />
     </View>
   );
 };
@@ -111,6 +148,7 @@ const PatientHome = (props) => {
 const style = StyleSheet.create({
   containerStyle: {
     marginTop: 50,
+    flex: 1,
   },
 });
 PatientHome.navigationOptions = () => {
