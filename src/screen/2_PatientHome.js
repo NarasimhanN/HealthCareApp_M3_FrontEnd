@@ -26,6 +26,7 @@ const PatientHome = (props) => {
   console.log("****PATIENT HOME******************************");
   const [workout_data, setWorkoutData] = useState("");
   const [patient_det, setPatientDet] = useState("");
+
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     console.log("focussed");
     getPatientWorkOut();
@@ -55,6 +56,11 @@ const PatientHome = (props) => {
 
   console.log("----------- Patient Details : ---------");
   console.log(patient_det);
+  const [workoutStatus, setWorkoutStatus] = useState(0);
+  let total = 0;
+  for (let i = 0; i < workout_data.length; i++) {
+    if (workout_data[i].completed) total += 1;
+  }
 
   const [state, setState] = React.useState([]);
 
@@ -70,7 +76,11 @@ const PatientHome = (props) => {
         }}
       >
         {/* Hello {patient_det["username"]} */}
-        Hello Simha
+        Hello Simha!!!
+      </Text>
+      <Spacer />
+      <Text h4 style={{ textAlign: "center" }}>
+        Completed {total} / {workout_data.length} workouts
       </Text>
       <Spacer />
 
@@ -113,32 +123,6 @@ const PatientHome = (props) => {
               }}
             />
           );
-        }}
-      />
-      <Button
-        title="Logout"
-        onPress={() => {
-          removeUsnPassToken();
-          props.navigation.navigate("Start");
-        }}
-        icon={{
-          name: "",
-          type: "font-awesome",
-          size: 15,
-          color: "white",
-        }}
-        iconContainerStyle={{ marginRight: 10 }}
-        titleStyle={{ fontWeight: "700" }}
-        buttonStyle={{
-          backgroundColor: "#5F9EA0",
-          borderColor: "transparent",
-          borderWidth: 0,
-          borderRadius: 30,
-        }}
-        containerStyle={{
-          width: 200,
-          alignSelf: "center",
-          marginVertical: 30,
         }}
       />
     </View>

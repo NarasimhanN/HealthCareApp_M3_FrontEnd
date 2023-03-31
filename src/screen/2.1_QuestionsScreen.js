@@ -3,6 +3,7 @@ import { Text, Input, Button } from "react-native-elements";
 import { View, FlatList } from "react-native";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
+import navigate from "../navigateRef";
 
 const QuestionsScreen = ({ navigation }) => {
   console.log("\n\n********************** QUESTION SCREEN- for a Activity");
@@ -145,6 +146,7 @@ const QuestionsScreen = ({ navigation }) => {
         onPress={() => {
           postResponse(responses, () => {
             navigation.navigate("PatientHome");
+            // navigate("PatientHome");
           });
         }}
         icon={{
