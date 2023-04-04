@@ -46,8 +46,8 @@ const onSubmit = async (email, password, setErrorMessage, callback) => {
   //const [pat_det, setPatientDet] = useState("");
   try {
     const response = await jsonServer.post(`/patient/login`, {
-      username: "abc",
-      password: "pass",
+      username: email,
+      password: password,
     });
 
     const pat_det = response.data;

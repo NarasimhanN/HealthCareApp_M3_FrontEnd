@@ -57,6 +57,7 @@ const PatientHome = (props) => {
   const unsubscribe = props.navigation.addListener("didFocus", () => {
     console.log("focussed");
     //getPatientWorkOut();
+
     updateWorkoutDataFromReducer();
   });
 
@@ -93,14 +94,16 @@ const PatientHome = (props) => {
       );
     }
 
+    // To Get the workout of the Perticular patient ( Using patient ID)
     try {
-      // const patientID = patient_det["patient_id"];
-      const patientID = 52;
+      const patientID = patient_det["patient_id"];
+      //const patientID = 52;
 
       const response = await jsonServer.get(`/patient/workout/${patientID}`);
       console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
       console.log(response.data);
-      workout_data_api = response.data;
+      // workout_data_api = response.data;
+      setWorkoutData(response.data);
     } catch (e) {
       console.log("\n\n\n----------------Ayoo..Issue Getting the Workouts");
       console.log(e.message);
@@ -112,8 +115,8 @@ const PatientHome = (props) => {
       console.log("\n\n\n\n\n==== Workout Data from  Reducer BEFORE ", state);
 
       console.log("==== Trying to Add Workout to Reducer ( In Pat Home)");
-      addWorkout(workout_data_api);
-
+      //  addWorkout(workout_data_api);
+      addWorkout(workout_data);
       console.log(
         "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n workout_data Data from Reducer : \n",
         state.workout_data
@@ -126,9 +129,10 @@ const PatientHome = (props) => {
     }
   };
   useEffect(() => {
+    // addWorkout("");
     getPatientWorkOut();
-    setPatientDet(state.patient_data);
-    setWorkoutData(state.workout_data);
+    // setPatientDet(state.patient_data);
+    // setWorkoutData(state.workout_data);
   }, []);
 
   const updateWorkoutDataFromReducer = () => {
@@ -152,7 +156,7 @@ const PatientHome = (props) => {
           fontSize: 19,
         }}
       >
-        Hello {patient_det["firstName"]}
+        Hello {state.patient_data.firstName}
         {/* Hello Simha!!! */}
       </Text>
       <Spacer />
@@ -162,7 +166,8 @@ const PatientHome = (props) => {
       <Spacer />
 
       <FlatList
-        data={workout_data}
+        // data={workout_data}
+        data={state.workout_data}
         keyExtractor={(workout) => workout.workout_instance_id}
         renderItem={({ item }) => {
           return expandState.includes(item.workout_instance_id) ? (

@@ -9,7 +9,7 @@ import { Context as PatientContext } from "../context/patientContext";
 const QuestionsScreen = ({ navigation }) => {
   //********************************************************** */
   // For Logging Reducer data . State not used in code ( only updatePreReqWorkout is used)
-  const { state } = useContext(PatientContext);
+  const { state, addWorkout } = useContext(PatientContext);
   console.log("\n\n********************** QUESTION SCREEN- for a Activity");
 
   console.log(
@@ -59,11 +59,54 @@ const QuestionsScreen = ({ navigation }) => {
       );
     }
   };
+
+  const updateResultToBackend = async (
+    updated_workout_instance_id,
+    updated_workout_instance
+  ) => {
+    console.log("-----\n\n\n", updated_workout_instance_id);
+    try {
+      const resp = await jsonServer.post(`/patient/workout`, {
+        instance: { workout_instance_id: updated_workout_instance_id },
+      });
+      console.log("\n\n\t\t SENTTTTT");
+    } catch (err) {
+      console.log(
+        "\n\t\t Ayooo: Issue Updating to Backend ( Workout Queston Page",
+        err.message
+      );
+    }
+  };
+
   //Make the Status as complete for the given workout ID
   const updateWorkoutReducerState = () => {
-    workoutObj.completed = true;
-    updateWorkoutStatus(workout_instance_id);
-    updatePreReqWorkout(workout_instance_id);
+    // workoutObj.completed = true;
+    // updateWorkoutStatus(workout_instance_id);
+    // updatePreReqWorkout(workout_instance_id);
+    const workoutCopy = state.workout_data;
+    console.log(workoutCopy);
+
+    for (let i = 0; i < workoutCopy.length; i++) {
+      if (workoutCopy[i].workout.workout_id == workout_id) {
+        workoutCopy[i].completed = true;
+        //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
+      }
+
+      for (let i = 0; i < workoutCopy.length; i++) {
+        if (workoutCopy[i].pre_id == workout_instance_id) {
+          workoutCopy[i].pre_id = 0;
+          // updateResultToBackend(
+          //   workoutCopy[i].workout_instance_id,
+          //   workoutCopy[i]
+          // );
+        }
+      }
+      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+      console.log(workout_instance_id);
+      addWorkout(workoutCopy);
+
+      updateResultToBackend();
+    }
   };
   const sendSoltions = () => {};
 
@@ -101,15 +144,10 @@ const QuestionsScreen = ({ navigation }) => {
           ? {
               workout_question: {
                 workout_question_id: qid,
-                workout_question: que,
+                question: que,
               },
               response: ans,
-              workout_instance: {
-                workout_instance_id: workout_instance_id,
-                workout: workoutObj.workout,
-              },
-              completed: true,
-              prerequisite: null,
+              instance_id: workout_instance_id,
             }
           : response;
       });
@@ -119,15 +157,10 @@ const QuestionsScreen = ({ navigation }) => {
         {
           workout_question: {
             workout_question_id: qid,
-            workout_question: que,
+            question: que,
           },
           response: ans,
-          workout_instance: {
-            workout_instance_id: workout_instance_id,
-            workout: workoutObj.workout,
-          },
-          completed: true,
-          prerequisite: null,
+          instance_id: workout_instance_id,
         },
       ];
     }
@@ -177,7 +210,7 @@ const QuestionsScreen = ({ navigation }) => {
         title="Submit"
         onPress={() => {
           //Update status as complete for the given workout AND Update the Prereq value of dependent workout
-          // updateWorkoutReducerState();
+          updateWorkoutReducerState();
           postResponse(responses, () => {
             navigation.navigate("PatientHome");
             // navigate("PatientHome");
