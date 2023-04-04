@@ -46,14 +46,14 @@ const onSubmit = async (email, password, setErrorMessage, callback) => {
   //const [pat_det, setPatientDet] = useState("");
   try {
     const response = await jsonServer.post(`/patient/login`, {
-      username: email,
-      password: password,
+      username: "abc",
+      password: "pass",
     });
 
     const pat_det = response.data;
     console.log("\n\n------------- Pring Pat_det");
     console.log(pat_det);
-    setUsnPassToken(email, password);
+    // setUsnPassToken(email, password);
     callback(pat_det);
 
     console.log("\n\n\n-----------------POST : Getting Patient Detials");

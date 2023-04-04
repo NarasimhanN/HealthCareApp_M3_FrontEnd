@@ -12,6 +12,8 @@ import AccountScreen from "./src/screen/3_AccountScreen";
 import { setNavigator } from "./src/navigateRef";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import { Provider as PatientContext } from "./src/context/patientContext";
+
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
@@ -153,7 +155,18 @@ const navigator = createStackNavigator(
   },
   { initialRouteName: "Start" }
 );
-export default createAppContainer(navigator);
+// export default createAppContainer(navigator);
+
+const App = createAppContainer(navigator);
+
+export default () => {
+  return (
+    <PatientContext>
+      <App />
+      {/*In the Blog Provider, the children prop is hte <App>*/}
+    </PatientContext>
+  );
+};
 
 // // const Tab = createBottomTabNavigator();
 
