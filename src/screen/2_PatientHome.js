@@ -47,44 +47,12 @@ import { Context as PatientContext } from "../context/patientContext";
 
 const PatientHome = (props) => {
   console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
-  const { state, addPatient, addWorkout } = useContext(PatientContext);
+  const { state, addWorkout } = useContext(PatientContext);
   const [workout_data, setWorkoutData] = useState("");
 
-  // const [patient_det, setPatientDet] = useState("");
-  // let workout_data_api = "";
-  // let patient_det_api = "";
-  // const { state, addBlogPosts, editBlogPosts } = useContext(PatientContext);
-
   const getPatientWorkOut = async () => {
-    //Getting patient data from login screen
     console.log("\n\n >>>>>>>> getPatientWorkout()\n");
     console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
-
-    // try {
-    //   //setPatientDet(props.navigation.getParam("pat_det"));
-    //   patient_det_api = props.navigation.getParam("pat_det");
-
-    //   console.log(
-    //     "\n\n PATIENT DATA from Start Screen -> Patient Home : ",
-    //     patient_det_api
-    //   );
-    // } catch (e) {
-    //   console.log("--------------- Error getting Patient Detials ");
-    // }
-
-    // // Addind Patient data to Patient Reducer
-
-    // try {
-    //   console.log("----------- Patient Details : ---------");
-    //   console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
-
-    //   addPatient(patient_det_api);
-    // } catch (err) {
-    //   console.log(
-    //     "\n\n\t\t ------------ Ayoo : Reducer Issue to add Patient",
-    //     err.message
-    //   );
-    // }
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {
@@ -117,7 +85,6 @@ const PatientHome = (props) => {
     console.log("\n\n\n\n\n==== Reducer data AFTER ", state);
   };
   useEffect(() => {
-    // addWorkout("");
     getPatientWorkOut();
   }, []);
 
@@ -138,6 +105,15 @@ const PatientHome = (props) => {
   }
 
   const [expandState, setState] = React.useState([]);
+
+  console.log(
+    "\n\n<<<<<<<<<<<<<<< Before Render -UseState -> workout data : \n",
+    workout_data
+  );
+  console.log(
+    "\n\n<<<<<<<<<<<Reducer data -> Workout Reducer : \n ",
+    state.workout_data
+  );
 
   return (
     <View style={style.containerStyle}>
@@ -160,8 +136,8 @@ const PatientHome = (props) => {
       <Spacer />
 
       <FlatList
-        data={workout_data}
-        //data={state.workout_data}
+        data={workout_data} // It works for this also ( Technically it should not)
+        // data={state.workout_data}
         keyExtractor={(workout) => workout.workout_instance_id}
         renderItem={({ item }) => {
           return expandState.includes(item.workout_instance_id) ? (
