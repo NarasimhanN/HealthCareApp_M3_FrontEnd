@@ -12,12 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //   }
 // };
 const patientReducer = (state, action) => {
-  console.log(
-    "\n\n\t\t ---------- REDUCER : Patient Reducer ---------------------"
-  );
   switch (action.type) {
     case "add_patient":
-      console.log("-------------Adding Patient ", action.payload);
       return {
         ...state,
         // pat_name: action.payload.pat_name,
@@ -25,7 +21,6 @@ const patientReducer = (state, action) => {
         patient_data: action.payload,
       };
     case "add_workout":
-      console.log("----------- Adding workout ");
       return {
         ...state,
         workout_data: action.payload,
@@ -51,11 +46,10 @@ const addPatient = (dispatch) => {
     //Handling error
     try {
       console.log(
-        "\n\n++++++++++++++++++++++++++++++++++++++++++++",
+        "\n\n==================== REDUCER :addPatient() \n Patient data recieved :  ",
         patient_data
       );
 
-      console.log("\n------Add Patient Deatils----------", patient_data);
       dispatch({
         type: "add_patient",
         payload: patient_data,
@@ -70,11 +64,10 @@ const addWorkout = (dispatch) => {
   return async (workout_data) => {
     try {
       console.log(
-        "\n\n++++++++++++++++++++++++++++++++++++++++++++",
+        "\n\n=====================  REDUCER : addWorkout() \n workout Data Recieved:",
         workout_data
       );
 
-      console.log("\n------Add Workout Deatils----------");
       dispatch({
         type: "add_workout",
         payload: workout_data,

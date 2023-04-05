@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 import { Text, Input, Button } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import jsonServer from "../../api/jsonServer";
+import { Context as PatientContext } from "../context/patientContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   getPassToken,
@@ -42,33 +43,41 @@ import {
 //   }
 // };
 
-const onSubmit = async (email, password, setErrorMessage, callback) => {
-  //const [pat_det, setPatientDet] = useState("");
-  try {
-    const response = await jsonServer.post(`/patient/login`, {
-      username: email,
-      password: password,
-    });
-
-    const pat_det = response.data;
-    console.log("\n\n------------- Pring Pat_det");
-    console.log(pat_det);
-    // setUsnPassToken(email, password);
-    callback(pat_det);
-
-    console.log("\n\n\n-----------------POST : Getting Patient Detials");
-
-    console.log(response.data);
-  } catch (e) {
-    setErrorMessage("Oppssss!!! Something went wrong..Try Again");
-    console.log("\n\n\n----------------Ayoo..Issue Getting the Details");
-    console.log(e.message);
-  }
-};
 const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { addPatient } = useContext(PatientContext);
+
+  const onSubmit = async (email, password, setErrorMessage, callback) => {
+    //const [pat_det, setPatientDet] = useState("");
+    console.log("\n\t\t((((((((((( LOGIN )))))))))))))))))))))");
+    try {
+      const response = await jsonServer.post(`/patient/login`, {
+        username: email,
+        password: password,
+      });
+
+      const pat_det = response.data;
+      console.log("\n\n------------- Pring Pat_det");
+      console.log(pat_det);
+      // setUsnPassToken(email, password);
+      storePatientDatainReducer(pat_det);
+      callback(pat_det);
+
+      console.log("\n\n\n-----------------POST : Getting Patient Detials");
+
+      console.log(response.data);
+    } catch (e) {
+      setErrorMessage("Oppssss!!! Something went wrong..Try Again");
+      console.log("\n\n\n----------------Ayoo..Issue Getting the Details");
+      console.log(e.message);
+    }
+  };
+
+  const storePatientDatainReducer = (pat_det) => {
+    addPatient(pat_det);
+  };
 
   // if (validateUsnPassToken()) {
   //   setEmail(getUsnToken());

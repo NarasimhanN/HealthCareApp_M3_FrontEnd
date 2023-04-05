@@ -46,63 +46,56 @@ import { Context as PatientContext } from "../context/patientContext";
 // };
 
 const PatientHome = (props) => {
-  console.log("****PATIENT HOME******************************");
+  console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
   const { state, addPatient, addWorkout } = useContext(PatientContext);
   const [workout_data, setWorkoutData] = useState("");
-  const [patient_det, setPatientDet] = useState("");
-  let workout_data_api = "";
-  let patient_det_api = "";
+
+  // const [patient_det, setPatientDet] = useState("");
+  // let workout_data_api = "";
+  // let patient_det_api = "";
   // const { state, addBlogPosts, editBlogPosts } = useContext(PatientContext);
-
-  const unsubscribe = props.navigation.addListener("didFocus", () => {
-    console.log("focussed");
-    //getPatientWorkOut();
-
-    updateWorkoutDataFromReducer();
-  });
 
   const getPatientWorkOut = async () => {
     //Getting patient data from login screen
-    try {
-      //setPatientDet(props.navigation.getParam("pat_det"));
-      patient_det_api = props.navigation.getParam("pat_det");
+    console.log("\n\n >>>>>>>> getPatientWorkout()\n");
+    console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
 
-      console.log(
-        "\n\n PATIENT DATA from Start Screen -> Patient Home : ",
-        patient_det_api
-      );
-    } catch (e) {
-      console.log("--------------- Error getting Patient Detials ");
-    }
-    // Addind Patient data to Patient Reducer
+    // try {
+    //   //setPatientDet(props.navigation.getParam("pat_det"));
+    //   patient_det_api = props.navigation.getParam("pat_det");
 
-    try {
-      console.log("----------- Patient Details : ---------");
-      console.log("\n\n\n\n\n==== Patient Detials from Reducer BEFORE ", state);
+    //   console.log(
+    //     "\n\n PATIENT DATA from Start Screen -> Patient Home : ",
+    //     patient_det_api
+    //   );
+    // } catch (e) {
+    //   console.log("--------------- Error getting Patient Detials ");
+    // }
 
-      console.log("==== Trying to Add Patient to Reducer ( In Pat Home)");
-      addPatient(patient_det_api);
+    // // Addind Patient data to Patient Reducer
 
-      console.log(
-        "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n Patient Data from Reducer : \n",
-        state.patient_data
-      );
-    } catch (err) {
-      console.log(
-        "\n\n\t\t ------------ Ayoo : Reducer Issue to add Patient",
-        err.message
-      );
-    }
+    // try {
+    //   console.log("----------- Patient Details : ---------");
+    //   console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
+
+    //   addPatient(patient_det_api);
+    // } catch (err) {
+    //   console.log(
+    //     "\n\n\t\t ------------ Ayoo : Reducer Issue to add Patient",
+    //     err.message
+    //   );
+    // }
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {
-      const patientID = patient_det["patient_id"];
-      //const patientID = 52;
-
-      const response = await jsonServer.get(`/patient/workout/${patientID}`);
+      // const patientID = patient_det["patient_id"];
+      //const patientID = 29;
+      const patientID = state.patient_data.patient_id;
       console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
+      console.log(" URL USed : ", `/patient/workout/${patientID}`);
+      const response = await jsonServer.get(`/patient/workout/${patientID}`);
+      addWorkout(response.data);
       console.log(response.data);
-      // workout_data_api = response.data;
       setWorkoutData(response.data);
     } catch (e) {
       console.log("\n\n\n----------------Ayoo..Issue Getting the Workouts");
@@ -111,33 +104,34 @@ const PatientHome = (props) => {
 
     //Adding Workout Data  to reducer:
     try {
-      console.log("----------- Workout Details : ---------");
-      console.log("\n\n\n\n\n==== Workout Data from  Reducer BEFORE ", state);
-
-      console.log("==== Trying to Add Workout to Reducer ( In Pat Home)");
-      //  addWorkout(workout_data_api);
-      addWorkout(workout_data);
       console.log(
-        "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n workout_data Data from Reducer : \n",
-        state.workout_data
+        "----------- Workout Details : useState(workout_data): ---------"
       );
+      console.log(workout_data);
     } catch (err) {
       console.log(
         "\n\n\t\t ------------ Ayoo : Reducer Issue to add Workout ",
         err.message
       );
     }
+    console.log("\n\n\n\n\n==== Reducer data AFTER ", state);
   };
   useEffect(() => {
     // addWorkout("");
     getPatientWorkOut();
-    // setPatientDet(state.patient_data);
-    // setWorkoutData(state.workout_data);
   }, []);
 
-  const updateWorkoutDataFromReducer = () => {
-    setWorkoutData(state.workout_data);
-  };
+  // const updateWorkoutDataFromReducer = () => {
+  //   setWorkoutData(state.workout_data);
+  // };
+
+  // const unsubscribe = props.navigation.addListener("didFocus", () => {
+  //   console.log("focussed");
+  //   //getPatientWorkOut();
+
+  //   updateWorkoutDataFromReducer();
+  // });
+
   let total = 0;
   for (let i = 0; i < workout_data.length; i++) {
     if (workout_data[i].completed) total += 1;
@@ -166,8 +160,8 @@ const PatientHome = (props) => {
       <Spacer />
 
       <FlatList
-        // data={workout_data}
-        data={state.workout_data}
+        data={workout_data}
+        //data={state.workout_data}
         keyExtractor={(workout) => workout.workout_instance_id}
         renderItem={({ item }) => {
           return expandState.includes(item.workout_instance_id) ? (

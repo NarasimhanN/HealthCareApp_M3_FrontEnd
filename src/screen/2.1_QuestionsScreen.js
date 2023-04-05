@@ -9,21 +9,10 @@ import { Context as PatientContext } from "../context/patientContext";
 const QuestionsScreen = ({ navigation }) => {
   //********************************************************** */
   // For Logging Reducer data . State not used in code ( only updatePreReqWorkout is used)
+  console.log("\n\n\t ((((((((( QUESTION PAGE of Workout ))))))))");
   const { state, addWorkout } = useContext(PatientContext);
-  console.log("\n\n********************** QUESTION SCREEN- for a Activity");
 
-  console.log(
-    "\n\n+++++++++++++++++++++++++++++++++ REDICERR VAL : PK DATA ",
-    state.patient_data
-  );
-  console.log(
-    "\n\n+++++++++++++++++++++++++++++++++ REDICERR VAL : WK DATA ",
-    state.workout_data
-  );
-  console.log(
-    "\n\n+++++++++++++++++++++++++++++++++ REDICERR VAL : WK No 1 ",
-    state.workout_data[3]
-  );
+  console.log("\n\n+++++++++++++++++++++++++++++++++ Reducer VAL:  \n", state);
 
   //********************************************************** */
   // const [questions, setQuestions] = useState("");
@@ -64,7 +53,11 @@ const QuestionsScreen = ({ navigation }) => {
     updated_workout_instance_id,
     updated_workout_instance
   ) => {
-    console.log("-----\n\n\n", updated_workout_instance_id);
+    console.log(
+      "\n >>>>>>>>>>>>> updateResultToBackend()  -----\n For workout instance id : ",
+      updated_workout_instance_id
+    );
+
     try {
       const resp = await jsonServer.post(`/patient/workout`, {
         instance: { workout_instance_id: updated_workout_instance_id },
@@ -80,10 +73,12 @@ const QuestionsScreen = ({ navigation }) => {
 
   //Make the Status as complete for the given workout ID
   const updateWorkoutReducerState = () => {
+    console.log("\n >>>>>>>>>>>>> updateWorkoutReducerState()  -----");
     // workoutObj.completed = true;
     // updateWorkoutStatus(workout_instance_id);
     // updatePreReqWorkout(workout_instance_id);
     const workoutCopy = state.workout_data;
+    console.log("\n\t Copy of Reducer - Workout Object : ");
     console.log(workoutCopy);
 
     for (let i = 0; i < workoutCopy.length; i++) {
@@ -91,22 +86,21 @@ const QuestionsScreen = ({ navigation }) => {
         workoutCopy[i].completed = true;
         //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
       }
-
-      for (let i = 0; i < workoutCopy.length; i++) {
-        if (workoutCopy[i].pre_id == workout_instance_id) {
-          workoutCopy[i].pre_id = 0;
-          // updateResultToBackend(
-          //   workoutCopy[i].workout_instance_id,
-          //   workoutCopy[i]
-          // );
-        }
-      }
-      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-      console.log(workout_instance_id);
-      addWorkout(workoutCopy);
-
-      updateResultToBackend();
     }
+
+    for (let i = 0; i < workoutCopy.length; i++) {
+      if (workoutCopy[i].pre_id == workout_instance_id) {
+        workoutCopy[i].pre_id = 0;
+        // updateResultToBackend(
+        //   workoutCopy[i].workout_instance_id,
+        //   workoutCopy[i]
+        // );
+      }
+    }
+    console.log("\n Updating Workout Value to Workout Reducer fun");
+    addWorkout(workoutCopy);
+
+    // updateResultToBackend();
   };
   const sendSoltions = () => {};
 
