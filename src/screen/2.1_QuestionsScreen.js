@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Text, Input, Button } from "react-native-elements";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Image } from "react-native";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import navigate from "../navigateRef";
@@ -27,6 +27,7 @@ const QuestionsScreen = ({ navigation }) => {
   const workout_instance_id = workoutObj.workout_instance_id;
   const questions = workoutObj.workout.questions;
 
+  //For sending Q and Response for the perticular workout - For workout with Q & A
   const postResponse = async (question_response, callback) => {
     try {
       console.log(
@@ -47,6 +48,14 @@ const QuestionsScreen = ({ navigation }) => {
         e
       );
     }
+  };
+
+  // For workout without Q&A
+  const postResponse_onlyID = async (callback) => {
+    try {
+    } catch (err) {}
+    //Going back to patient
+    callback();
   };
 
   const updateResultToBackend = async (
@@ -71,7 +80,7 @@ const QuestionsScreen = ({ navigation }) => {
     }
   };
 
-  //Make the Status as complete for the given workout ID
+  //Make the Status as complete for the given workout ID and Preworkout are assigned 0 for linked workout
   const updateWorkoutReducerState = () => {
     console.log("\n >>>>>>>>>>>>> updateWorkoutReducerState()  -----");
     // workoutObj.completed = true;
@@ -84,6 +93,7 @@ const QuestionsScreen = ({ navigation }) => {
     for (let i = 0; i < workoutCopy.length; i++) {
       if (workoutCopy[i].workout.workout_id == workout_id) {
         workoutCopy[i].completed = true;
+        //   workoutCopy[i].title = "Hahaha";
         //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
       }
     }
@@ -160,78 +170,124 @@ const QuestionsScreen = ({ navigation }) => {
     }
   };
 
-  return (
-    <View>
-      <Text
-        h4
-        style={{
-          textAlign: "center",
-          color: "#5F9EA0",
-          marginTop: 100,
-          marginBottom: 80,
-        }}
-      >
-        Answer the below questions
-      </Text>
-      <Spacer>
-        <FlatList
-          data={questions}
-          keyExtractor={(question) => question.workout_question_id}
-          renderItem={({ item }) => {
-            return (
-              <View>
-                <Text> {item.question} : </Text>
-                <Input
-                  val=""
-                  keyboardType="numeric"
-                  onChangeText={(newVal) =>
-                    setRespose(
-                      updateResponse(
-                        item.workout_question_id,
-                        item.question,
-                        newVal
-                      )
-                    )
-                  }
-                />
-              </View>
-            );
+  if (!workoutObj.question) {
+    //When there are no Questions for the wortkout
+    return (
+      <View>
+        <Text style={{ textAlign: "center", marginTop: 150, fontSize: 20 }}>
+          Woooahh!!! No Questions this time..Enjoyyy
+        </Text>
+        <Button
+          title="Mark as Complete"
+          onPress={() => {
+            //Update status as complete for the given workout AND Update the Prereq value of dependent workout
+            updateWorkoutReducerState();
+            postResponse_onlyID(() => {
+              navigation.navigate("PatientHome");
+              // navigate("PatientHome");
+            });
+          }}
+          icon={{
+            name: "save",
+            type: "font-awesome",
+            size: 15,
+            color: "white",
+          }}
+          iconContainerStyle={{ marginRight: 10 }}
+          titleStyle={{ fontWeight: "700" }}
+          buttonStyle={{
+            backgroundColor: "#5F9EA0",
+            borderColor: "transparent",
+            borderWidth: 0,
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            width: 200,
+            alignSelf: "center",
+            marginTop: 100,
           }}
         />
-      </Spacer>
+        {/* <Image
+          source={require("../../images/enjoy.jpg")}
+          style={{ width: 50, alignSelf: "center" }}
+        /> */}
+      </View>
+    );
+  }
+  //When workout has Questions
+  else
+    return (
+      <View>
+        <Text
+          h4
+          style={{
+            textAlign: "center",
+            color: "#5F9EA0",
+            marginTop: 100,
+            marginBottom: 80,
+          }}
+        >
+          Answer the below questions
+        </Text>
+        <Spacer>
+          <FlatList
+            data={questions}
+            keyExtractor={(question) => question.workout_question_id}
+            renderItem={({ item }) => {
+              return (
+                <View>
+                  <Text> {item.question} : </Text>
+                  <Input
+                    val=""
+                    keyboardType="numeric"
+                    onChangeText={(newVal) =>
+                      setRespose(
+                        updateResponse(
+                          item.workout_question_id,
+                          item.question,
+                          newVal
+                        )
+                      )
+                    }
+                  />
+                </View>
+              );
+            }}
+          />
+        </Spacer>
 
-      <Button
-        title="Submit"
-        onPress={() => {
-          //Update status as complete for the given workout AND Update the Prereq value of dependent workout
-          updateWorkoutReducerState();
-          postResponse(responses, () => {
-            navigation.navigate("PatientHome");
-            // navigate("PatientHome");
-          });
-        }}
-        icon={{
-          name: "save",
-          type: "font-awesome",
-          size: 15,
-          color: "white",
-        }}
-        iconContainerStyle={{ marginRight: 10 }}
-        titleStyle={{ fontWeight: "700" }}
-        buttonStyle={{
-          backgroundColor: "#5F9EA0",
-          borderColor: "transparent",
-          borderWidth: 0,
-          borderRadius: 30,
-        }}
-        containerStyle={{
-          width: 200,
-          alignSelf: "center",
-          marginVertical: 30,
-        }}
-      />
-    </View>
-  );
+        <Button
+          title="Submit"
+          onPress={() => {
+            //Update status as complete for the given workout AND Update the Prereq value of dependent workout
+            updateWorkoutReducerState();
+            postResponse(responses, () => {
+              navigation.navigate("PatientHome");
+              // navigate("PatientHome");
+            });
+          }}
+          icon={{
+            name: "save",
+            type: "font-awesome",
+            size: 15,
+            color: "white",
+          }}
+          iconContainerStyle={{ marginRight: 10 }}
+          titleStyle={{ fontWeight: "700" }}
+          buttonStyle={{
+            backgroundColor: "#5F9EA0",
+            borderColor: "transparent",
+            borderWidth: 0,
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            width: 200,
+            alignSelf: "center",
+            marginVertical: 30,
+          }}
+        />
+      </View>
+    );
 };
 
 QuestionsScreen.navigationOptions = () => {

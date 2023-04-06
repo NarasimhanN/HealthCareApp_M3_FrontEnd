@@ -62,9 +62,10 @@ const PatientHome = (props) => {
       console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
       console.log(" URL USed : ", `/patient/workout/${patientID}`);
       const response = await jsonServer.get(`/patient/workout/${patientID}`);
-      addWorkout(response.data);
+      // const response2 = await jsonServer.get(`/patient/workout/${patientID}`);
       console.log(response.data);
       setWorkoutData(response.data);
+      addWorkout(response.data);
     } catch (e) {
       console.log("\n\n\n----------------Ayoo..Issue Getting the Workouts");
       console.log(e.message);
@@ -137,7 +138,7 @@ const PatientHome = (props) => {
 
       <FlatList
         data={workout_data} // It works for this also ( Technically it should not)
-        // data={state.workout_data}
+        //data={state.workout_data}
         keyExtractor={(workout) => workout.workout_instance_id}
         renderItem={({ item }) => {
           return expandState.includes(item.workout_instance_id) ? (
