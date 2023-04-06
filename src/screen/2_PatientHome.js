@@ -115,6 +115,16 @@ const PatientHome = (props) => {
     "\n\n<<<<<<<<<<<Reducer data -> Workout Reducer : \n ",
     state.workout_data
   );
+  const getWotkoutName = (preid) => {
+    console.log(" Calling getWorkoutName ....", state.workout_data.length);
+    for (let i = 0; i < state.workout_data.length; i++) {
+      console.log(" Comparisoin :", state.workout_data);
+      if (state.workout_data[i].workout_instance_id === preid)
+        return state.workout_data[i].workout.title;
+    }
+    console.log("Falieddddddddd");
+    return preid;
+  };
 
   return (
     <View style={style.containerStyle}>
@@ -165,13 +175,22 @@ const PatientHome = (props) => {
             </Spacer>
           ) : (
             <DropDownComponent
-              workout_title={item.workout.title}
+              workout_title={
+                item.pre_id != 0
+                  ? `${item.workout.title}  ( PreReq: ${getWotkoutName(
+                      item.pre_id
+                    )})`
+                  : item.workout.title
+              }
+              //{item.workout.title}
               workout_description={item.description}
               workout_status={item.completed}
               expandable={false}
+              preReqId={item.pre_id}
               onPress={() => {
                 {
-                  setState([...expandState, item.workout_instance_id]);
+                  if (item.pre_id == 0)
+                    setState([...expandState, item.workout_instance_id]);
                 }
               }}
             />

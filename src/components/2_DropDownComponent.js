@@ -16,6 +16,7 @@ const DropDownComponent = ({
   onPress,
   goToQuestions,
   questions,
+  preReqId,
 }) => {
   return (
     <View style={style.containerStyle}>
