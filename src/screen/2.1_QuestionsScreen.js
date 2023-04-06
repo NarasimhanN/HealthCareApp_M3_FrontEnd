@@ -170,7 +170,7 @@ const QuestionsScreen = ({ navigation }) => {
     }
   };
 
-  if (!workoutObj.question) {
+  if (workoutObj.workout.questions == 0) {
     //When there are no Questions for the wortkout
     return (
       <View>
@@ -215,7 +215,7 @@ const QuestionsScreen = ({ navigation }) => {
     );
   }
   //When workout has Questions
-  else
+  else {
     return (
       <View>
         <Text
@@ -288,6 +288,7 @@ const QuestionsScreen = ({ navigation }) => {
         />
       </View>
     );
+  }
 };
 
 QuestionsScreen.navigationOptions = () => {
