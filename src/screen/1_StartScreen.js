@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -20,7 +20,12 @@ import {
   validateUsnPassToken,
   setUsnPassToken,
   removeUsnPassToken,
-} from "../components/1_Token";
+  removeToken,
+  tokenAvaliable,
+  getOfflineData,
+  storeOfflineData,
+  removeOfflineData,
+} from "../offlineStorage/1_Token";
 
 // import BackgroundImg from "../components/BackGroundImage";
 
@@ -43,6 +48,18 @@ import {
 //   }
 // };
 
+const validateToken = async () => {
+  console.log("\n\n\t >>>>>>>>> validationToken()");
+  if (await tokenAvaliable()) {
+    console.log("\t\t Hurray! Direct Signin");
+    // Go to Patient Home
+  } else {
+    console.log("\t\tNo Token Avaliable...Creating with new Signin");
+    //Signup Page with Setting a new token
+  }
+  //removeToken();
+  //setToken();
+};
 const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,15 +76,24 @@ const StartScreen = ({ navigation }) => {
       });
 
       const pat_det = response.data;
-      console.log("\n\n------------- Pring Pat_det");
-      console.log(pat_det);
+      // console.log("\n\n------------- Pring Pat_det in LoginScreen");
+      // console.log(pat_det);
       // setUsnPassToken(email, password);
       storePatientDatainReducer(pat_det);
+      //To StorePatientDetails Offline
+      try {
+        storeOfflineData("patient_data", JSON.stringify(pat_det));
+        getOfflineData("patient_data");
+        removeOfflineData("tokeen");
+      } catch (err) {
+        console.log(" \n\t\t Ayooo : Issue Storing Data ", err.message);
+      }
+
       callback(pat_det);
 
-      console.log("\n\n\n-----------------POST : Getting Patient Detials");
+      // console.log("\n\n\n-----------------POST : Getting Patient Detials");
 
-      console.log(response.data);
+      // console.log(response.data);
     } catch (e) {
       setErrorMessage("Oppssss!!! Something went wrong..Try Again");
       console.log("\n\n\n----------------Ayoo..Issue Getting the Details");
@@ -78,6 +104,9 @@ const StartScreen = ({ navigation }) => {
   const storePatientDatainReducer = (pat_det) => {
     addPatient(pat_det);
   };
+  useEffect(() => {
+    validateToken();
+  }, []);
 
   // if (validateUsnPassToken()) {
   //   setEmail(getUsnToken());

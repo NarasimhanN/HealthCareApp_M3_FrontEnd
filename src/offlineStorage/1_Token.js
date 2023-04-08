@@ -3,7 +3,7 @@ import React from "react";
 
 const setToken = async () => {
   try {
-    console.log("())()()()(()()()() SEtting TOken ");
+    console.log("\n\n\t\t }} setToken()");
     await AsyncStorage.setItem("token", "11111000000");
   } catch (e) {
     console.log(" )))))))))))))))))))))))))))))))CANT SET TOKEN");
@@ -13,23 +13,33 @@ const setToken = async () => {
 const getToken = async () => {
   try {
     const token = await AsyncStorage.getItem("token").then((token) =>
-      console.log("Toeknnnnn ()()()(  ===========", token)
+      console.log(" ======= TOKEN VALUE : getToken() ", token)
     );
     return token;
   } catch (e) {
-    console.log("\n\n(((((((((((((((((((((((((((()))))))))) NO TOKEN");
+    console.log("\n\n :(:(:(:(:(:( NO TOKEN");
+    return -1;
   }
 };
+const tokenAvaliable = async () => {
+  try {
+    console.log("\n\n\t\t }} tokenAvaliable() ");
+    const token = await AsyncStorage.getItem("token");
+    console.log(" ======= TOKEN VALUE : ", token);
 
+    if (token) return true;
+    else return false;
+  } catch (e) {
+    console.log("\n\n :(:(:(:(:(:( NO TOKEN \n", e.message);
+    return false;
+  }
+};
 const removeToken = async () => {
   try {
-    await AsyncStorage.removeItem("token").then((token) =>
-      console.log("((((((((((((((((( TOKEN REMOVED )))))))))))))))))")
-    );
+    console.log("\n\n\t }} removeToken() ");
+    await AsyncStorage.removeItem("token");
   } catch (e) {
-    console.log(
-      "\n\n(((((((((((((((((((((((((((()))))))))) FAILED TO REMOVE TOKEN :( "
-    );
+    console.log("\n\n Ayooooo :  FAILED TO REMOVE TOKEN :( ");
   }
 };
 
@@ -96,6 +106,37 @@ const getPassToken = async () => {
   }
 };
 
+const storeOfflineData = async (token, value) => {
+  console.log("\n\n\t\t }}}  storeOfflineData()  {{{   : ", token);
+  try {
+    await AsyncStorage.setItem(token, value);
+  } catch (e) {
+    console.log(`\n\n\t Ayooo  : Cant Set token ${token}`);
+  }
+};
+const getOfflineData = async (token_key) => {
+  console.log("\n\n\t\t }}}  getOfflineData()  {{{  : ", token_key);
+  try {
+    const offliceData = await AsyncStorage.getItem(token_key);
+    console.log(
+      "\n\t ========== Data Retrieved from Offlice : \n",
+      JSON.parse(offliceData)
+    );
+  } catch (err) {
+    console.log(`\n\n\t Ayoo : Cannot retrieve ${token_key}`);
+  }
+};
+
+const removeOfflineData = async (token_key) => {
+  console.log("\n\n\t\t }}}  removeOffliceData()  {{{   : ", token_key);
+
+  try {
+    await AsyncStorage.removeItem(token_key);
+  } catch (e) {
+    console.log(`\n\n\t Ayoo : Cannot Remove token ${token_key}`);
+  }
+};
+
 export {
   setToken,
   getToken,
@@ -105,4 +146,8 @@ export {
   validateUsnPassToken,
   getUsnToken,
   getPassToken,
+  tokenAvaliable,
+  storeOfflineData,
+  getOfflineData,
+  removeOfflineData,
 };

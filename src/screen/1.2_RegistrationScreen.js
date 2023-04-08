@@ -41,7 +41,7 @@ const RegistrationScreen = ({ navigation }) => {
       console.log("\n\n\n----------------Ayoo..Issue Getting the questions");
     }
   };
-  const postResponse = async (patient_id, callback) => {
+  const postResponse = async (patient_id) => {
     try {
       console.log("\n\n\n-----------------POST : UPDATING DB with Responses");
       console.log("Patient ID :", patient_id);
@@ -52,10 +52,17 @@ const RegistrationScreen = ({ navigation }) => {
       );
 
       console.log("Responses : \n", responses);
-      console.log("LOG OF RESPONSE : ", resp);
-      console.log("Going to PATIENT HOME");
-      callback();
-      //Navigate to Patient Home page
+      console.log("LOG OF RESPONSE : ", resp.data);
+      if (resp.data == 5) {
+        console.log(
+          "Going to PATIENT HOME As Sevarity is High, Pakka doctor beku"
+        );
+        navigation.navigate("Start");
+        //Navigate to Patient Home page
+      } else {
+        // Sevarity is low so ask him if he needs a doctor
+        navigation.navigate("ChoiceOfDoctor", { pat_id: patient_id });
+      }
     } catch (e) {
       console.log(
         "\n\n\n----------------Ayoo Some expection while Submitting the responses",
@@ -107,9 +114,7 @@ const RegistrationScreen = ({ navigation }) => {
         <Button
           title="Submit"
           onPress={() => {
-            postResponse(patient_id, () => {
-              navigation.navigate("Start");
-            });
+            postResponse(patient_id);
           }}
           icon={{
             name: "save",

@@ -45,10 +45,10 @@ const addPatient = (dispatch) => {
     //Handel success by updating state
     //Handling error
     try {
-      console.log(
-        "\n\n==================== REDUCER :addPatient() \n Patient data recieved :  ",
-        patient_data
-      );
+      // console.log(
+      //   "\n\n==================== REDUCER :addPatient() \n Patient data recieved :  ",
+      //   patient_data
+      // );
 
       dispatch({
         type: "add_patient",
@@ -63,10 +63,10 @@ const addPatient = (dispatch) => {
 const addWorkout = (dispatch) => {
   return async (workout_data) => {
     try {
-      console.log(
-        "\n\n=====================  REDUCER : addWorkout() \n workout Data Recieved:",
-        workout_data
-      );
+      // console.log(
+      //   "\n\n=====================  REDUCER : addWorkout() \n workout Data Recieved:",
+      //   workout_data
+      // );
 
       dispatch({
         type: "add_workout",
@@ -81,7 +81,7 @@ const addWorkout = (dispatch) => {
 const updatePreReqWorkout = (dispatch) => {
   return async (workout_instance_id) => {
     try {
-      console.log("\n------Update Pre Req----------");
+      // console.log("\n------Update Pre Req----------");
       dispatch({
         type: "update_prereq",
         payload: workout_instance_id,
@@ -95,7 +95,7 @@ const updatePreReqWorkout = (dispatch) => {
 const updateWorkoutStatus = (dispatch) => {
   return async (workout_instance_id) => {
     try {
-      console.log("\n------Update Workout Status----------");
+      //   console.log("\n------Update Workout Status----------");
       dispatch({
         type: "update_workout_status",
         payload: workout_instance_id,

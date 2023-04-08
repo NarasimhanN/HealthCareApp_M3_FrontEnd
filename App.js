@@ -1,7 +1,7 @@
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import StartScreen from "./src/screen/1_StartScreen";
-import RegistrationScreen from "./src/screen/1.3_RegistrationScreen";
+import RegistrationScreen from "./src/screen/1.2_RegistrationScreen";
 import PersonalDetailsRegistration from "./src/screen/1.1_PersonalDetailsRegistration";
 import PatientHome from "./src/screen/2_PatientHome";
 import QuestionsScreen from "./src/screen/2.1_QuestionsScreen";
@@ -13,6 +13,7 @@ import { setNavigator } from "./src/navigateRef";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider as PatientContext } from "./src/context/patientContext";
+import ChoiceofDoctor from "./src/screen/1.3_ChoiceofDoctor";
 
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
@@ -152,6 +153,7 @@ const navigator = createStackNavigator(
     PersonalDet: PersonalDetailsRegistration,
     PatientHome: PatientHome,
     Questions: QuestionsScreen,
+    ChoiceOfDoctor: ChoiceofDoctor,
   },
   { initialRouteName: "Start" }
 );

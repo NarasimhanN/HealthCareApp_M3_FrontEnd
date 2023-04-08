@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { setToken, validateUsnPassToken } from "../components/1_Token";
+import { setToken, validateUsnPassToken } from "../offlineStorage/1_Token";
 
 const InitScreen = (props) => {
   console.log("---In INIT SCREEN");

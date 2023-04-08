@@ -6,7 +6,7 @@ import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import DropDownComponent from "../components/2_DropDownComponent";
 import { Entypo } from "@expo/vector-icons";
-import { removeToken, removeUsnPassToken } from "../components/1_Token";
+import { removeToken, removeUsnPassToken } from "../offlineStorage/1_Token";
 import { Context as PatientContext } from "../context/patientContext";
 // import { Context as BlogContext } from "../context/blogContext";
 
@@ -45,25 +45,31 @@ import { Context as PatientContext } from "../context/patientContext";
 //   }
 // };
 
+const logOut = (callback) => {
+  //Clear all Cache
+  removeToken();
+  callback();
+};
+
 const PatientHome = (props) => {
-  console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
+  // console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
   const { state, addWorkout } = useContext(PatientContext);
   const [workout_data, setWorkoutData] = useState("");
 
   const getPatientWorkOut = async () => {
-    console.log("\n\n >>>>>>>> getPatientWorkout()\n");
-    console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
+    // console.log("\n\n >>>>>>>> getPatientWorkout()\n");
+    // console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {
       // const patientID = patient_det["patient_id"];
       //const patientID = 29;
       const patientID = state.patient_data.patient_id;
-      console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
-      console.log(" URL USed : ", `/patient/workout/${patientID}`);
+      //  console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
+      //  console.log(" URL USed : ", `/patient/workout/${patientID}`);
       const response = await jsonServer.get(`/patient/workout/${patientID}`);
       // const response2 = await jsonServer.get(`/patient/workout/${patientID}`);
-      console.log(response.data);
+      //   console.log(response.data);
       setWorkoutData(response.data);
       addWorkout(response.data);
     } catch (e) {
@@ -73,17 +79,17 @@ const PatientHome = (props) => {
 
     //Adding Workout Data  to reducer:
     try {
-      console.log(
-        "----------- Workout Details : useState(workout_data): ---------"
-      );
-      console.log(workout_data);
+      // console.log(
+      //   "----------- Workout Details : useState(workout_data): ---------"
+      // );
+      // console.log(workout_data);
     } catch (err) {
       console.log(
         "\n\n\t\t ------------ Ayoo : Reducer Issue to add Workout ",
         err.message
       );
     }
-    console.log("\n\n\n\n\n==== Reducer data AFTER ", state);
+    // console.log("\n\n\n\n\n==== Reducer data AFTER ", state);
   };
   useEffect(() => {
     getPatientWorkOut();
@@ -107,22 +113,22 @@ const PatientHome = (props) => {
 
   const [expandState, setState] = React.useState([]);
 
-  console.log(
-    "\n\n<<<<<<<<<<<<<<< Before Render -UseState -> workout data : \n",
-    workout_data
-  );
-  console.log(
-    "\n\n<<<<<<<<<<<Reducer data -> Workout Reducer : \n ",
-    state.workout_data
-  );
+  // console.log(
+  //   "\n\n<<<<<<<<<<<<<<< Before Render -UseState -> workout data : \n",
+  //   workout_data
+  // );
+  // console.log(
+  //   "\n\n<<<<<<<<<<<Reducer data -> Workout Reducer : \n ",
+  //   state.workout_data
+  // );
   const getWotkoutName = (preid) => {
-    console.log(" Calling getWorkoutName ....", state.workout_data.length);
+    // console.log(" Calling getWorkoutName ....", state.workout_data.length);
     for (let i = 0; i < state.workout_data.length; i++) {
-      console.log(" Comparisoin :", state.workout_data);
+      // console.log(" Comparisoin :", state.workout_data);
       if (state.workout_data[i].workout_instance_id === preid)
         return state.workout_data[i].workout.title;
     }
-    console.log("Falieddddddddd");
+    // console.log("Falieddddddddd");
     return preid;
   };
 
@@ -195,6 +201,26 @@ const PatientHome = (props) => {
               }}
             />
           );
+        }}
+      />
+
+      <Button
+        title="Logout"
+        loadingProps={{ size: "small", color: "white" }}
+        buttonStyle={{
+          backgroundColor: "rgba(111, 202, 186, 1)",
+          borderRadius: 5,
+        }}
+        titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+        containerStyle={{
+          marginHorizontal: 50,
+          height: 50,
+          width: 150,
+          marginBottom: 10,
+          alignSelf: "center",
+        }}
+        onPress={() => {
+          logOut(() => props.navigation.navigate("Start"));
         }}
       />
     </View>
