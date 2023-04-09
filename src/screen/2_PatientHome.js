@@ -6,7 +6,15 @@ import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import DropDownComponent from "../components/2_DropDownComponent";
 import { Entypo } from "@expo/vector-icons";
-import { removeToken, removeUsnPassToken } from "../offlineStorage/1_Token";
+import {
+  removeToken,
+  tokenAvaliable,
+  removeUsnPassToken,
+  storeOfflineData,
+  setToken,
+  getOfflineData,
+  removeOfflineData,
+} from "../offlineStorage/1_Token";
 import { Context as PatientContext } from "../context/patientContext";
 // import { Context as BlogContext } from "../context/blogContext";
 
@@ -48,6 +56,8 @@ import { Context as PatientContext } from "../context/patientContext";
 const logOut = (callback) => {
   //Clear all Cache
   removeToken();
+  removeOfflineData("patient_data");
+  removeOfflineData("workout_data");
   callback();
 };
 
@@ -67,14 +77,32 @@ const PatientHome = (props) => {
       const patientID = state.patient_data.patient_id;
       //  console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
       //  console.log(" URL USed : ", `/patient/workout/${patientID}`);
-      const response = await jsonServer.get(`/patient/workout/${patientID}`);
+      const response = await jsonServer.get(`/patient/workoutt/${patientID}`);
       // const response2 = await jsonServer.get(`/patient/workout/${patientID}`);
       //   console.log(response.data);
       setWorkoutData(response.data);
       addWorkout(response.data);
+      storeOfflineData("workout_data", JSON.stringify(response.data));
+      // setToken();
+      //getOfflineData("workout_data");
     } catch (e) {
       console.log("\n\n\n----------------Ayoo..Issue Getting the Workouts");
       console.log(e.message);
+      console.log("\n\t Checking Local Storage -- ");
+      //If Token exists and not connected to network, Get from offline
+      const backendData = await getOfflineData("workout_data");
+      if (backendData) {
+        console.log(
+          "\n\n\t\t Getting WorkoutData from Local Storage ( Offline Mode )"
+        );
+
+        addWorkout(backendData);
+        setWorkoutData(backendData);
+      } else {
+        // No storage and  No Network connection
+        //Throw a prompt to connect to network
+        console.log("\n\n\t\t Ayoooo : Cannot get offline Data");
+      }
     }
 
     //Adding Workout Data  to reducer:

@@ -48,23 +48,30 @@ import {
 //   }
 // };
 
-const validateToken = async () => {
-  console.log("\n\n\t >>>>>>>>> validationToken()");
-  if (await tokenAvaliable()) {
-    console.log("\t\t Hurray! Direct Signin");
-    // Go to Patient Home
-  } else {
-    console.log("\t\tNo Token Avaliable...Creating with new Signin");
-    //Signup Page with Setting a new token
-  }
-  //removeToken();
-  //setToken();
-};
 const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { addPatient } = useContext(PatientContext);
+
+  const validateToken = async () => {
+    console.log("\n\n\t >>>>>>>>> validationToken()");
+    if (await tokenAvaliable()) {
+      console.log("\t\t Hurray! Direct Signin");
+      //Get patient data from local storage
+      storePatientDatainReducer(await getOfflineData("patient_data"));
+      console.log(
+        "\n\n\t Navigating to Patient HOme Directly \n Getting Patient DEtails from Offline"
+      );
+      //Goto PatientHome
+      navigation.navigate("PatientHome");
+    } else {
+      console.log("\t\tNo Token Avaliable...Creating with new Signin");
+      //Signup Page with Setting a new token
+    }
+    //removeToken();
+    //setToken();
+  };
 
   const onSubmit = async (email, password, setErrorMessage, callback) => {
     //const [pat_det, setPatientDet] = useState("");
@@ -84,11 +91,12 @@ const StartScreen = ({ navigation }) => {
       try {
         storeOfflineData("patient_data", JSON.stringify(pat_det));
         getOfflineData("patient_data");
-        removeOfflineData("tokeen");
+        // removeOfflineData("tokeen");
       } catch (err) {
         console.log(" \n\t\t Ayooo : Issue Storing Data ", err.message);
       }
-
+      //Setting Token for SSO in the future
+      setToken();
       callback(pat_det);
 
       // console.log("\n\n\n-----------------POST : Getting Patient Detials");
@@ -104,6 +112,7 @@ const StartScreen = ({ navigation }) => {
   const storePatientDatainReducer = (pat_det) => {
     addPatient(pat_det);
   };
+
   useEffect(() => {
     validateToken();
   }, []);

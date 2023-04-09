@@ -117,13 +117,15 @@ const storeOfflineData = async (token, value) => {
 const getOfflineData = async (token_key) => {
   console.log("\n\n\t\t }}}  getOfflineData()  {{{  : ", token_key);
   try {
-    const offliceData = await AsyncStorage.getItem(token_key);
+    const offlineData = await AsyncStorage.getItem(token_key);
     console.log(
-      "\n\t ========== Data Retrieved from Offlice : \n",
-      JSON.parse(offliceData)
+      "\n\t ========== Data Retrieved from Offline : \n",
+      JSON.parse(offlineData)
     );
+    return JSON.parse(offlineData);
   } catch (err) {
     console.log(`\n\n\t Ayoo : Cannot retrieve ${token_key}`);
+    return null;
   }
 };
 

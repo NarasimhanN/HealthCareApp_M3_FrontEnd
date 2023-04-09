@@ -9,10 +9,10 @@ import { Context as PatientContext } from "../context/patientContext";
 const QuestionsScreen = ({ navigation }) => {
   //********************************************************** */
   // For Logging Reducer data . State not used in code ( only updatePreReqWorkout is used)
-  console.log("\n\n\t ((((((((( QUESTION PAGE of Workout ))))))))");
+  // console.log("\n\n\t ((((((((( QUESTION PAGE of Workout ))))))))");
   const { state, addWorkout } = useContext(PatientContext);
 
-  console.log("\n\n+++++++++++++++++++++++++++++++++ Reducer VAL:  \n", state);
+  // console.log("\n\n+++++++++++++++++++++++++++++++++ Reducer VAL:  \n", state);
 
   //********************************************************** */
   // const [questions, setQuestions] = useState("");
@@ -22,7 +22,7 @@ const QuestionsScreen = ({ navigation }) => {
   const [responses, setRespose] = useState([]);
   const workoutObj = navigation.getParam("workoutObj");
 
-  console.log("Workout Obj : ", workoutObj);
+  //console.log("Workout Obj : ", workoutObj);
   const workout_id = workoutObj.workout.workout_id;
   const workout_instance_id = workoutObj.workout_instance_id;
   const questions = workoutObj.workout.questions;
@@ -87,8 +87,8 @@ const QuestionsScreen = ({ navigation }) => {
     // updateWorkoutStatus(workout_instance_id);
     // updatePreReqWorkout(workout_instance_id);
     const workoutCopy = state.workout_data;
-    console.log("\n\t Copy of Reducer - Workout Object : ");
-    console.log(workoutCopy);
+    //console.log("\n\t Copy of Reducer - Workout Object : ");
+    // console.log(workoutCopy);
 
     for (let i = 0; i < workoutCopy.length; i++) {
       if (workoutCopy[i].workout.workout_id == workout_id) {
