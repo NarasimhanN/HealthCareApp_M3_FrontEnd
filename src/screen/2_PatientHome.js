@@ -77,7 +77,7 @@ const PatientHome = (props) => {
       const patientID = state.patient_data.patient_id;
       //  console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
       //  console.log(" URL USed : ", `/patient/workout/${patientID}`);
-      const response = await jsonServer.get(`/patient/workoutt/${patientID}`);
+      const response = await jsonServer.get(`/patient/workout/${patientID}`);
       // const response2 = await jsonServer.get(`/patient/workout/${patientID}`);
       //   console.log(response.data);
       setWorkoutData(response.data);
@@ -90,18 +90,22 @@ const PatientHome = (props) => {
       console.log(e.message);
       console.log("\n\t Checking Local Storage -- ");
       //If Token exists and not connected to network, Get from offline
-      const backendData = await getOfflineData("workout_data");
-      if (backendData) {
-        console.log(
-          "\n\n\t\t Getting WorkoutData from Local Storage ( Offline Mode )"
-        );
+      try {
+        const backendData = await getOfflineData("workout_data");
+        if (backendData) {
+          console.log(
+            "\n\n\t\t Getting WorkoutData from Local Storage ( Offline Mode )"
+          );
 
-        addWorkout(backendData);
-        setWorkoutData(backendData);
-      } else {
-        // No storage and  No Network connection
-        //Throw a prompt to connect to network
-        console.log("\n\n\t\t Ayoooo : Cannot get offline Data");
+          addWorkout(backendData);
+          setWorkoutData(backendData);
+        } else {
+          // No storage and  No Network connection
+          //Throw a prompt to connect to network
+          console.log("\n\n\t\t Ayoooo : Cannot get offline Data");
+        }
+      } catch (err) {
+        console.log("\n\t Ayoo : Some Promise Issue with Local Storage");
       }
     }
 
@@ -163,7 +167,7 @@ const PatientHome = (props) => {
   return (
     <View style={style.containerStyle}>
       <Spacer />
-      <Text
+      {/* <Text
         h3
         style={{
           textAlign: "center",
@@ -172,11 +176,20 @@ const PatientHome = (props) => {
         }}
       >
         Hello {state.patient_data.firstName}
-        {/* Hello Simha!!! */}
-      </Text>
-      <Spacer />
-      <Text h4 style={{ textAlign: "center" }}>
-        Completed {total} / {workout_data.length} workouts
+    
+      </Text> */}
+      <Spacer>
+        <Text h3 style={{}}>
+          Namaskar
+        </Text>
+        <Text h2 style={{ marginBottom: 0, color: "rgba(130, 202, 186, 1)" }}>
+          {`${state.patient_data.firstName} ${state.patient_data.lastName} !!`}
+        </Text>
+      </Spacer>
+
+      <Text h4 style={{ textAlign: "center", fontSize: 20 }}>
+        {/* Completed {total} / {workout_data.length} workouts */}
+        ----------- Workout List ----------
       </Text>
       <Spacer />
 
@@ -232,25 +245,65 @@ const PatientHome = (props) => {
         }}
       />
 
-      <Button
-        title="Logout"
-        loadingProps={{ size: "small", color: "white" }}
-        buttonStyle={{
-          backgroundColor: "rgba(111, 202, 186, 1)",
-          borderRadius: 5,
-        }}
-        titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-        containerStyle={{
-          marginHorizontal: 50,
-          height: 50,
-          width: 150,
-          marginBottom: 10,
-          alignSelf: "center",
-        }}
-        onPress={() => {
-          logOut(() => props.navigation.navigate("Start"));
-        }}
-      />
+      <View style={{ flexDirection: "row" }}>
+        <Button
+          title="Account"
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: "rgba(111, 202, 186, 1)",
+            borderRadius: 5,
+          }}
+          titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+          containerStyle={{
+            marginHorizontal: 10,
+            height: 50,
+            width: 120,
+            marginBottom: 10,
+            alignSelf: "center",
+          }}
+          onPress={() => {
+            props.navigation.navigate("Account");
+          }}
+        />
+        <Button
+          title="Logout"
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: "rgba(111, 202, 186, 1)",
+            borderRadius: 5,
+          }}
+          titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+          containerStyle={{
+            marginHorizontal: 10,
+            height: 50,
+            width: 100,
+            marginBottom: 10,
+            alignSelf: "center",
+          }}
+          onPress={() => {
+            logOut(() => props.navigation.navigate("Start"));
+          }}
+        />
+        <Button
+          title="Chat"
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: "rgba(111, 202, 186, 1)",
+            borderRadius: 5,
+          }}
+          titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+          containerStyle={{
+            marginHorizontal: 10,
+            height: 50,
+            width: 110,
+            marginBottom: 10,
+            alignSelf: "center",
+          }}
+          onPress={() => {
+            props.navigation.navigate("Chat");
+          }}
+        />
+      </View>
     </View>
   );
 };

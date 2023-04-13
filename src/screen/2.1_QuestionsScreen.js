@@ -29,10 +29,10 @@ const QuestionsScreen = ({ navigation }) => {
 
   //For sending Q and Response for the perticular workout - For workout with Q & A
   const postResponse = async (question_response, callback) => {
+    console.log(
+      "\n\n\n-----------------POST ( Workout Questions Response) : UPDATING DB with Responses"
+    );
     try {
-      console.log(
-        "\n\n\n-----------------POST ( Workout Questions Response) : UPDATING DB with Responses"
-      );
       // const resp = await jsonServer.post("/questionare_answers", responses);
       const resp = await jsonServer.post(
         `/patient/workout/response`,
@@ -86,29 +86,36 @@ const QuestionsScreen = ({ navigation }) => {
     // workoutObj.completed = true;
     // updateWorkoutStatus(workout_instance_id);
     // updatePreReqWorkout(workout_instance_id);
-    const workoutCopy = state.workout_data;
-    //console.log("\n\t Copy of Reducer - Workout Object : ");
-    // console.log(workoutCopy);
+    try {
+      const workoutCopy = state.workout_data;
+      //console.log("\n\t Copy of Reducer - Workout Object : ");
+      // console.log(workoutCopy);
 
-    for (let i = 0; i < workoutCopy.length; i++) {
-      if (workoutCopy[i].workout.workout_id == workout_id) {
-        workoutCopy[i].completed = true;
-        //   workoutCopy[i].title = "Hahaha";
-        //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
+      for (let i = 0; i < workoutCopy.length; i++) {
+        if (workoutCopy[i].workout.workout_id == workout_id) {
+          workoutCopy[i].completed = true;
+          //   workoutCopy[i].title = "Hahaha";
+          //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
+        }
       }
-    }
 
-    for (let i = 0; i < workoutCopy.length; i++) {
-      if (workoutCopy[i].pre_id == workout_instance_id) {
-        workoutCopy[i].pre_id = 0;
-        // updateResultToBackend(
-        //   workoutCopy[i].workout_instance_id,
-        //   workoutCopy[i]
-        // );
+      for (let i = 0; i < workoutCopy.length; i++) {
+        if (workoutCopy[i].pre_id == workout_instance_id) {
+          workoutCopy[i].pre_id = 0;
+          // updateResultToBackend(
+          //   workoutCopy[i].workout_instance_id,
+          //   workoutCopy[i]
+          // );
+        }
       }
+
+      console.log("\n Updating Workout Value to Workout Reducer fun");
+      addWorkout(workoutCopy);
+    } catch (err) {
+      console.log(
+        " \n\n\t Ayoo : Some issue in Updation of Workout - for preid"
+      );
     }
-    console.log("\n Updating Workout Value to Workout Reducer fun");
-    addWorkout(workoutCopy);
 
     // updateResultToBackend();
   };

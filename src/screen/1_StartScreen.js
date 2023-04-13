@@ -185,6 +185,25 @@ const StartScreen = ({ navigation }) => {
           <TouchableOpacity onPress={() => navigation.navigate("PersonalDet")}>
             <Text style={style.linkStyle}>No Account? Signup here</Text>
           </TouchableOpacity>
+          <Button
+            title="Chat"
+            loadingProps={{ size: "small", color: "white" }}
+            buttonStyle={{
+              backgroundColor: "rgba(111, 202, 186, 1)",
+              borderRadius: 5,
+            }}
+            titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+            containerStyle={{
+              marginHorizontal: 10,
+              height: 50,
+              width: 110,
+              marginBottom: 10,
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              navigation.navigate("Chat");
+            }}
+          />
         </Spacer>
       </View>
     </>
